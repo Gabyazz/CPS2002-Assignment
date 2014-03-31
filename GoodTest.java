@@ -1,6 +1,6 @@
-import static org.Junit.Assert.*;
+import static org.junit.Assert.*;
 
-import org.Junit.Test;
+import org.junit.Test;
 
 
 public class GoodTest {
