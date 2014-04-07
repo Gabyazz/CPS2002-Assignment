@@ -1,79 +1,64 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- WARNING: Eclipse auto-generated file.
-              Any modifications will be overwritten.
-              To include a user specific buildfile here, simply create one in the same
-              directory with the processing instruction <?eclipse.ant.import?>
-              as the first entry and export the buildfile again. --><project basedir="." default="build" name="Unit Testing">
-    <property environment="env"/>
-    <property name="junit.output.dir" value="junit"/>
-    <property name="debuglevel" value="source,lines,vars"/>
-    <property name="target" value="1.7"/>
-    <property name="source" value="1.7"/>
-    <path id="JUnit 4.libraryclasspath">
-        <pathelement location="../../../../../eclipse java/plugins/org.junit_4.11.0.v201303080030/junit.jar"/>
-        <pathelement location="../../../../../eclipse java/plugins/org.hamcrest.core_1.3.0.v201303031735.jar"/>
-    </path>
-    <path id="Unit Testing.classpath">
-        <pathelement location="bin"/>
-        <path refid="JUnit 4.libraryclasspath"/>
-    </path>
-    <target name="init">
-        <mkdir dir="bin"/>
-        <copy includeemptydirs="false" todir="bin">
-            <fileset dir="src">
-                <exclude name="**/*.java"/>
-            </fileset>
-        </copy>
-    </target>
-    <target name="clean">
-        <delete dir="bin"/>
-    </target>
-    <target depends="clean" name="cleanall"/>
-    <target depends="build-subprojects,build-project" name="build"/>
-    <target name="build-subprojects"/>
-    <target depends="init" name="build-project">
-        <echo message="${ant.project.name}: ${ant.file}"/>
-        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
-            <src path="src"/>
-            <classpath refid="Unit Testing.classpath"/>
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="demo" default="test">
+ 
+    <property name="src.dir" location="." />
+    <property name="src.java.dir" location="${src.dir}/" />
+    <property name="src.test.dir" location="${src.dir}/" />
+ 
+    <property name="target.dir" location="build" />
+    <property name="target.classes.java.dir" location="${target.dir}/" />
+    <property name="target.classes.test.dir" location="${target.dir}/" />
+ 
+    <property name="target.report.dir" location="${target.dir}/" />
+ 
+    <target name="compile.java">
+        <mkdir dir="${target.classes.java.dir}" />
+        <javac destdir="${target.classes.java.dir}" includeantruntime="false">
+            <src path="${src.java.dir}" />
         </javac>
     </target>
-    <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
-    <target description="copy Eclipse compiler jars to ant lib directory" name="init-eclipse-compiler">
-        <copy todir="${ant.library.dir}">
-            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
-        </copy>
-        <unzip dest="${ant.library.dir}">
-            <patternset includes="jdtCompilerAdapter.jar"/>
-            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
-        </unzip>
+ 
+    <target name="compile.test" depends="compile.java">
+        <mkdir dir="${target.classes.test.dir}" />
+        <javac destdir="${target.classes.test.dir}" includeantruntime="false">
+            <src path="${src.test.dir}" />
+            <classpath>
+                <pathelement location="${target.classes.java.dir}" />
+                <pathelement path="lib/junit-4.11.jar" />
+            </classpath>
+        </javac>
     </target>
-    <target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
-        <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
-        <antcall target="build"/>
-    </target>
-    <target name="GoodTest">
-        <mkdir dir="${junit.output.dir}"/>
-        <junit fork="yes" printsummary="withOutAndErr">
-            <formatter type="xml"/>
-            <test name="GoodTest" todir="${junit.output.dir}"/>
-            <classpath refid="Unit Testing.classpath"/>
+ 
+    <target name="compile" depends="compile.java,compile.test" />
+ 
+    <target name="test" depends="compile">
+        <mkdir dir="${target.report.dir}" />
+ 
+        <junit printsummary="yes" haltonerror="yes" haltonfailure="yes">
+            <formatter type="plain" usefile="false" />
+            <formatter type="xml" />
+            <batchtest todir="${target.report.dir}">
+                <fileset dir="${src.test.dir}">
+                    <include name="**/*Test.java" />
+                    <exclude name="**/Test*All.java" />
+                </fileset>
+            </batchtest>
+            <classpath>
+                <pathelement location="${target.classes.java.dir}" />
+                <pathelement location="${target.classes.test.dir}" />
+                <pathelement path="lib/junit-4.10.jar" />
+            </classpath>
         </junit>
     </target>
-    <target name="HelloWorldTest">
-        <mkdir dir="${junit.output.dir}"/>
-        <junit fork="yes" printsummary="withOutAndErr">
-            <formatter type="xml"/>
-            <test name="HelloWorldTest" todir="${junit.output.dir}"/>
-            <classpath refid="Unit Testing.classpath"/>
-        </junit>
-    </target>
-    <target name="junitreport">
-        <junitreport todir="${junit.output.dir}">
-            <fileset dir="${junit.output.dir}">
-                <include name="TEST-*.xml"/>
+ 
+    <target name="report" depends="test">
+        <mkdir dir="${target.report.dir}/html" />
+        <junitreport todir="${target.report.dir}">
+            <fileset dir="${target.report.dir}">
+                <include name="TEST-*.xml" />
             </fileset>
-            <report format="frames" todir="${junit.output.dir}"/>
+            <report todir="${target.report.dir}/html" />
         </junitreport>
     </target>
+ 
 </project>
