@@ -9,6 +9,10 @@
     <property name="debuglevel" value="source,lines,vars"/>
     <property name="target" value="1.7"/>
     <property name="source" value="1.7"/>
+
+    < property  name = " junit.build.dir "  value = " junitClasses "  /> 
+    < property  name = " junit.report.dir "  value = " junitReport "  />
+
     <path id="JUnit 4.libraryclasspath">
         <pathelement location="../../../../../eclipse java/plugins/org.junit_4.11.0.v201303080030/junit.jar"/>
         <pathelement location="../../../../../eclipse java/plugins/org.hamcrest.core_1.3.0.v201303031735.jar"/>
@@ -19,6 +23,10 @@
     </path>
     <target name="init">
         <mkdir dir="bin"/>
+
+        < mkdir  dir = " $ {junit.build.dir} "  /> 
+        < mkdir  dir = " $ {junit.report.dir} "  />
+
         <copy includeemptydirs="false" todir="bin">
             <fileset dir="src">
                 <exclude name="**/*.java"/>
@@ -27,6 +35,10 @@
     </target>
     <target name="clean">
         <delete dir="bin"/>
+
+        < delete  failonerror = " false "  dir = " ${junit.build.dir} "  /> 
+        < delete  failonerror = " false "  dir = " ${junit.report.dir} "  />
+
     </target>
     <target depends="clean" name="cleanall"/>
     <target depends="build-subprojects,build-project" name="build"/>
@@ -76,4 +88,32 @@
             <report format="frames" todir="${junit.output.dir}"/>
         </junitreport>
     </target>
+
+< target  name = " junit "  depends = " init " > 
+        < javac 
+                encoding = " ISO-8859-1 " 
+                destdir = " ${junit.build.dir} " 
+                classpathref = " lib.jarfiles " 
+                debug = " on " 
+                deprecation = " on " 
+                optimize = " on " > 
+            < src  path = " ${src.dir} "  /> 
+            < src  path = " ${test.dir} "  /> 
+        </ javac >
+ 
+        < junit  fork = " no "  printsummary = " no "  haltonfailure = " no "  showoutput = " true "  filtertrace = " false " > 
+        < classpath  refid = " lib.jarfiles "  /> 
+        < classpath > 
+                    < pathelement  path = " ${java.class.path} "  /> 
+            < pathelement  path = " ${junit.build.dir} "  /> 
+        </ classpath >
+ 
+        < batchtest  todir = " ${junit.report.dir} " > 
+            < fileset  dir = " ${junit.build.dir} " > 
+                < include  name = " GoodTest.class "  /> 
+            </ fileset > 
+            < formatter  type = " xml "  /> 
+        </ batchtest > 
+    </ junit > 
+    </ target >
 </project>
