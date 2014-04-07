@@ -10,6 +10,16 @@
 <project name="Jenkins" default="default" basedir=".">
     <description>Builds, tests, and runs the project Jenkins.</description>
     <import file="build-impl.xml"/>
+    <target depends="clean" name="cleanall"/>
+    <target depends="build-subprojects,build-project" name="build"/>
+    <target name="build-subprojects"/>
+    <target depends="init" name="build-project">
+        <echo message="${ant.project.name}: ${ant.file}"/>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
+            <src path="src"/>
+            <classpath refid="Unit Testing.classpath"/>
+        </javac>
+    </target>
     <!--
 
     There exist several targets which are by default empty and which can be 
