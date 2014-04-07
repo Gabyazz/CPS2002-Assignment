@@ -1,119 +1,73 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- WARNING: Eclipse auto-generated file.
-              Any modifications will be overwritten.
-              To include a user specific buildfile here, simply create one in the same
-              directory with the processing instruction <?eclipse.ant.import?>
-              as the first entry and export the buildfile again. --><project basedir="." default="build" name="Unit Testing">
-    <property environment="env"/>
-    <property name="junit.output.dir" value="junit"/>
-    <property name="debuglevel" value="source,lines,vars"/>
-    <property name="target" value="1.7"/>
-    <property name="source" value="1.7"/>
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- You may freely edit this file. See commented blocks below for -->
+<!-- some examples of how to customize the build. -->
+<!-- (If you delete it and reopen the project it will be recreated.) -->
+<!-- By default, only the Clean and Build commands use this build script. -->
+<!-- Commands such as Run, Debug, and Test only use this build script if -->
+<!-- the Compile on Save feature is turned off for the project. -->
+<!-- You can turn off the Compile on Save (or Deploy on Save) setting -->
+<!-- in the project's Project Properties dialog box.-->
+<project name="Jenkins" default="default" basedir=".">
+    <description>Builds, tests, and runs the project Jenkins.</description>
+    <import file="build-impl.xml"/>
+    <!--
 
-    < property  name = " junit.build.dir "  value = " junitClasses "  /> 
-    < property  name = " junit.report.dir "  value = " junitReport "  />
+    There exist several targets which are by default empty and which can be 
+    used for execution of your tasks. These targets are usually executed 
+    before and after some main targets. They are: 
 
-    <path id="JUnit 4.libraryclasspath">
-        <pathelement location="../../../../../eclipse java/plugins/org.junit_4.11.0.v201303080030/junit.jar"/>
-        <pathelement location="../../../../../eclipse java/plugins/org.hamcrest.core_1.3.0.v201303031735.jar"/>
-    </path>
-    <path id="Unit Testing.classpath">
-        <pathelement location="bin"/>
-        <path refid="JUnit 4.libraryclasspath"/>
-    </path>
-    <target name="init">
-        <mkdir dir="bin"/>
+      -pre-init:                 called before initialization of project properties
+      -post-init:                called after initialization of project properties
+      -pre-compile:              called before javac compilation
+      -post-compile:             called after javac compilation
+      -pre-compile-single:       called before javac compilation of single file
+      -post-compile-single:      called after javac compilation of single file
+      -pre-compile-test:         called before javac compilation of JUnit tests
+      -post-compile-test:        called after javac compilation of JUnit tests
+      -pre-compile-test-single:  called before javac compilation of single JUnit test
+      -post-compile-test-single: called after javac compilation of single JUunit test
+      -pre-jar:                  called before JAR building
+      -post-jar:                 called after JAR building
+      -post-clean:               called after cleaning build products
 
-        < mkdir  dir = " $ {junit.build.dir} "  /> 
-        < mkdir  dir = " $ {junit.report.dir} "  />
+    (Targets beginning with '-' are not intended to be called on their own.)
 
-        <copy includeemptydirs="false" todir="bin">
-            <fileset dir="src">
-                <exclude name="**/*.java"/>
-            </fileset>
-        </copy>
-    </target>
-    <target name="clean">
-        <delete dir="bin"/>
+    Example of inserting an obfuscator after compilation could look like this:
 
-        < delete  failonerror = " false "  dir = " ${junit.build.dir} "  /> 
-        < delete  failonerror = " false "  dir = " ${junit.report.dir} "  />
+        <target name="-post-compile">
+            <obfuscate>
+                <fileset dir="${build.classes.dir}"/>
+            </obfuscate>
+        </target>
 
-    </target>
-    <target depends="clean" name="cleanall"/>
-    <target depends="build-subprojects,build-project" name="build"/>
-    <target name="build-subprojects"/>
-    <target depends="init" name="build-project">
-        <echo message="${ant.project.name}: ${ant.file}"/>
-        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
-            <src path="src"/>
-            <classpath refid="Unit Testing.classpath"/>
-        </javac>
-    </target>
-    <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
-    <target description="copy Eclipse compiler jars to ant lib directory" name="init-eclipse-compiler">
-        <copy todir="${ant.library.dir}">
-            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
-        </copy>
-        <unzip dest="${ant.library.dir}">
-            <patternset includes="jdtCompilerAdapter.jar"/>
-            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
-        </unzip>
-    </target>
-    <target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
-        <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
-        <antcall target="build"/>
-    </target>
-    <target name="GoodTest">
-        <mkdir dir="${junit.output.dir}"/>
-        <junit fork="yes" printsummary="withOutAndErr">
-            <formatter type="xml"/>
-            <test name="GoodTest" todir="${junit.output.dir}"/>
-            <classpath refid="Unit Testing.classpath"/>
-        </junit>
-    </target>
-    <target name="HelloWorldTest">
-        <mkdir dir="${junit.output.dir}"/>
-        <junit fork="yes" printsummary="withOutAndErr">
-            <formatter type="xml"/>
-            <test name="HelloWorldTest" todir="${junit.output.dir}"/>
-            <classpath refid="Unit Testing.classpath"/>
-        </junit>
-    </target>
-    <target name="junitreport">
-        <junitreport todir="${junit.output.dir}">
-            <fileset dir="${junit.output.dir}">
-                <include name="TEST-*.xml"/>
-            </fileset>
-            <report format="frames" todir="${junit.output.dir}"/>
-        </junitreport>
-    </target>
+    For list of available properties check the imported 
+    nbproject/build-impl.xml file. 
 
-< target  name = " junit "  depends = " init " > 
-        < javac 
-                encoding = " ISO-8859-1 " 
-                destdir = " ${junit.build.dir} " 
-                classpathref = " lib.jarfiles " 
-                debug = " on " 
-                deprecation = " on " 
-                optimize = " on " > 
-            < src  path = " ${src.dir} "  /> 
-            < src  path = " ${test.dir} "  /> 
-        </ javac >
- 
-        < junit  fork = " no "  printsummary = " no "  haltonfailure = " no "  showoutput = " true "  filtertrace = " false " > 
-        < classpath  refid = " lib.jarfiles "  /> 
-        < classpath > 
-                    < pathelement  path = " ${java.class.path} "  /> 
-            < pathelement  path = " ${junit.build.dir} "  /> 
-        </ classpath >
- 
-        < batchtest  todir = " ${junit.report.dir} " > 
-            < fileset  dir = " ${junit.build.dir} " > 
-                < include  name = " GoodTest.class "  /> 
-            </ fileset > 
-            < formatter  type = " xml "  /> 
-        </ batchtest > 
-    </ junit > 
-    </ target >
+
+    Another way to customize the build is by overriding existing main targets.
+    The targets of interest are: 
+
+      -init-macrodef-javac:     defines macro for javac compilation
+      -init-macrodef-junit:     defines macro for junit execution
+      -init-macrodef-debug:     defines macro for class debugging
+      -init-macrodef-java:      defines macro for class execution
+      -do-jar:                  JAR building
+      run:                      execution of project 
+      -javadoc-build:           Javadoc generation
+      test-report:              JUnit report generation
+
+    An example of overriding the target for project execution could look like this:
+
+        <target name="run" depends="Jenkins-impl.jar">
+            <exec dir="bin" executable="launcher.exe">
+                <arg file="${dist.jar}"/>
+            </exec>
+        </target>
+
+    Notice that the overridden target depends on the jar target and not only on 
+    the compile target as the regular run target does. Again, for a list of available 
+    properties which you can use, check the target you are overriding in the
+    nbproject/build-impl.xml file. 
+
+    -->
 </project>
