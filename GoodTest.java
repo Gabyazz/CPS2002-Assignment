@@ -34,7 +34,7 @@ public class GoodTest {
 	@Test
 	public void testDivide2() 
 	{
-		assertEquals(5, calculator.divide(3, 1));
+		assertEquals(3, calculator.divide(3, 1));
 	}
 
 }
