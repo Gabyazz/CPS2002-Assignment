@@ -46,7 +46,7 @@
             <classpath>
                 <pathelement location="${target.classes.java.dir}" />
                 <pathelement location="${target.classes.test.dir}" />
-                <pathelement path="lib/junit-4.10.jar" />
+                <pathelement path="lib/junit-4.11.jar" />
             </classpath>
         </junit>
     </target>
