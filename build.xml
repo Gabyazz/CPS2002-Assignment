@@ -11,7 +11,6 @@
     <property name="source" value="1.7"/>
     <property name=" junit.build.dir"  value="junitClasses"/> 
     <property name=" junit.report.dir"  value="junitReport"/>
-
     <path id="JUnit 4.libraryclasspath">
         <pathelement location="../../../../../eclipse java/plugins/org.junit_4.11.0.v201303080030/junit.jar"/>
         <pathelement location="../../../../../eclipse java/plugins/org.hamcrest.core_1.3.0.v201303031735.jar"/>
