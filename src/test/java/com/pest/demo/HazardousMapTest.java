@@ -4,9 +4,9 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import com.test.demo.HazardousMap;
-import com.test.demo.Map;
-import com.test.demo.Map.Colour;
+import com.pest.demo.HazardousMap;
+import com.pest.demo.Map;
+import com.pest.demo.Map.Colour;
 
 public class HazardousMapTest {
 

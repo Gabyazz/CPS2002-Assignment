@@ -10,13 +10,13 @@ import java.io.File;
 import org.apache.commons.io.FileUtils;
 import org.junit.*;
 
-import com.test.demo.Game;
-import com.test.demo.Map;
-import com.test.demo.Position;
-import com.test.demo.SafeMap;
-import com.test.demo.HazardousMap;
-import com.test.demo.Player;
-import com.test.demo.Map.Colour;
+import com.pest.demo.Game;
+import com.pest.demo.Map;
+import com.pest.demo.Position;
+import com.pest.demo.SafeMap;
+import com.pest.demo.HazardousMap;
+import com.pest.demo.Player;
+import com.pest.demo.Map.Colour;
 
 public class GameTest
 {

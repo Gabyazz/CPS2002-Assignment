@@ -5,10 +5,10 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.test.demo.Game;
-import com.test.demo.Map;
-import com.test.demo.Player;
-import com.test.demo.SafeMap;
+import com.pest.demo.Game;
+import com.pest.demo.Map;
+import com.pest.demo.Player;
+import com.pest.demo.SafeMap;
 
 public class TeamTest {
 	
